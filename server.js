@@ -8,7 +8,6 @@ var express         = require('express');
 var MongoClient     = require('mongodb').MongoClient;
 var bodyParser      = require('body-parser');
 var cors            = require('cors');
-var db              = require('./config/db');
 var app             = express();
 
 const port = 3000;
@@ -28,7 +27,7 @@ MongoClient.connect(dbURL, function(err, client) {
     // const database = database.db('testdb');
     // require ('./routes')(app, database);
 
-    db.collection('scanData').insert(testObject, function(err, result) {
+    client.collection('scanData').insert(testObject, function(err, result) {
         if (err) {
             res.send( {'error': 'An error has occured' });
         }
