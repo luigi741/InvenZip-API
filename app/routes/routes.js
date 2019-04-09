@@ -20,6 +20,7 @@ module.exports = function(app, db) {
     });
     app.post('/upcScan', function(req, res) {
         res.send('Camera scanning function request received.');
-        console.log('Request sent.');
+        console.log('Request received:');
+        console.log(req.body);
     });
 };
