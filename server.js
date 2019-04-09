@@ -8,6 +8,7 @@ var express         = require('express');
 var MongoClient     = require('mongodb').MongoClient;
 var bodyParser      = require('body-parser');
 var cors            = require('cors');
+var db              = require('./app/config/db');
 var app             = express();
 
 const port = 3000;
