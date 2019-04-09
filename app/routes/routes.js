@@ -18,4 +18,8 @@ module.exports = function(app, db) {
         res.send('Hello, response from /test route!');
         console.log(req.body);
     });
+    app.post('/upcScan', function(req, res) {
+        res.send('Camera scanning function request received.');
+        console.log('Request sent.');
+    });
 };
