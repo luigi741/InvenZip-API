@@ -12,6 +12,7 @@ var db              = require('./config/db');
 var app             = express();
 
 const port = 3000;
+const dbURL = 'mongodb://admin:password@54.198.236.52:27017/testdb';
 require('./app/routes/routes')(app, {});
 
 app.use(
@@ -20,12 +21,21 @@ app.use(
     bodyParser.json()
 );
 
-MongoClient.connect(db.url, function(err, client) {
+MongoClient.connect(dbURL, function(err, client) {
     if (err) {
         return console.log(err);
     }
     // const database = database.db('testdb');
-    require ('./routes')(app, database);
+    // require ('./routes')(app, database);
+
+    db.collection('scanData').insert(testObject, function(err, result) {
+        if (err) {
+            res.send( {'error': 'An error has occured' });
+        }
+        else {
+            res.send(result.ops[0]);
+        }
+    });
 
     app.listen(port, function() {
         console.log('API is live on ' + port);
