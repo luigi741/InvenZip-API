@@ -20,12 +20,15 @@ app.use(
     bodyParser.json()
 );
 
-MongoClient.connect(db.url, function(err, database) {
+MongoClient.connect(db.url, function(err, client) {
     if (err) {
         return console.log(err);
     }
     // const database = database.db('testdb');
     // require ('./app/routes')(app, database);
+
+    var myDB = client.db('testdb');
+
 
     app.listen(port, function() {
         console.log('API is live on ' + port);
