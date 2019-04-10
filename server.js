@@ -24,10 +24,9 @@ app.listen(PORT, function() {
     console.log('NodeJS server running on port: ' + PORT);
 });
 
-MongoClient.connect(dbURL, {useNewUrlParser: true}, function(err, client) {
+MongoClient.connect(dbURL, { useNewUrlParser: true }, function(err, client) {
     assert.equal(null, err);
     console.log('Connected successfully to MongoDB server.');
-
     const db = client.db(dbName);
 
     app.get('/', function(req, res) {
@@ -36,12 +35,11 @@ MongoClient.connect(dbURL, {useNewUrlParser: true}, function(err, client) {
 
     app.get('/test', function(req,res) {
         console.log('/test');
-        res.send('Hello from /test');
+        res.send('Reached /test route');
     });
 
-    app.post('/postman', function(req, res) {
+    app.post('/upcScan', function(req, res) {
         console.log(req.body);
-
         var testObj = req.body;
         db.collection('scanData').insertOne(testObj, function(err, result) {
             if (err) {
@@ -51,7 +49,6 @@ MongoClient.connect(dbURL, {useNewUrlParser: true}, function(err, client) {
                 console.log('Data inserted successfully.');
             }
         });
-
-        res.send('Hello from /postman');
+        res.send('Hello from /upcScan');
     });
 });
