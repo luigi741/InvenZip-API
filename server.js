@@ -1,18 +1,18 @@
 //==============================================================================
 // server.js
-// Main server side code for InvenZip
+// Server side NodeJS code for our custom API
 // By: Luis Castro
-// =============================================================================
+//==============================================================================
 
-var express         = require('express');
-var MongoClient     = require('mongodb').MongoClient;
-var bodyParser      = require('body-parser');
-var cors            = require('cors');
-var db              = require('./app/config/db');
-var app             = express();
-
-const port = 3000;
-require('./app/routes/routes')(app, {});
+const MongoClient   = require('mongodb').MongoClient;
+const express       = require('express');
+const bodyParser    = require('body-parser');
+const cors          = require('cors');
+const assert        = require('assert');
+const app           = express();
+const PORT          = 3000;
+const dbURL         = 'mongodb://admin:password@54.198.236.52:27017/testdb';
+const dbName        = 'testdb';
 
 app.use(
     cors({ origin: true }),
@@ -20,17 +20,38 @@ app.use(
     bodyParser.json()
 );
 
-MongoClient.connect(db.url, function(err, client) {
-    if (err) {
-        return console.log(err);
-    }
-    // const database = database.db('testdb');
-    // require ('./app/routes')(app, database);
+app.listen(PORT, function() {
+    console.log('NodeJS server running on port: ' + PORT);
+});
 
-    var myDB = client.db('testdb');
+MongoClient.connect(dbURL, {useNewUrlParser: true}, function(err, client) {
+    assert.equal(null, err);
+    console.log('Connected successfully to MongoDB server.');
 
+    const db = client.db(dbName);
 
-    app.listen(port, function() {
-        console.log('API is live on ' + port);
+    app.get('/', function(req, res) {
+        res.send('Hello from /');
+    });
+
+    app.get('/test', function(req,res) {
+        console.log('/test');
+        res.send('Hello from /test');
+    });
+
+    app.post('/postman', function(req, res) {
+        console.log(req.body);
+
+        var testObj = req.body;
+        db.collection('scanData').insertOne(testObj, function(err, result) {
+            if (err) {
+                console.log(err);
+            }
+            else {
+                console.log('Data inserted successfully.');
+            }
+        });
+
+        res.send('Hello from /postman');
     });
 });

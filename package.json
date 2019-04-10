@@ -1,18 +1,22 @@
 {
-  "name": "invapi",
+  "name": "customapi",
   "version": "1.0.0",
-  "description": "Custom API for InvenZip application",
+  "description": "Custom API built for test purposes",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
   },
   "author": "Luis Castro",
   "license": "ISC",
   "dependencies": {
+    "assert": "^1.4.1",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "express": "^4.16.4",
-    "mongodb": "^3.2.3",
+    "mongodb": "^3.2.3"
+  },
+  "devDependencies": {
     "nodemon": "^1.18.11"
   }
 }
