@@ -39,7 +39,7 @@ MongoClient.connect(dbURL, {useNewUrlParser: true}, function(err, client) {
         res.send('Hello from /test');
     });
 
-    app.post('/postman', function(req, res) {
+    app.post('/upcScan', function(req, res) {
         console.log(req.body);
 
         var testObj = req.body;
@@ -52,6 +52,6 @@ MongoClient.connect(dbURL, {useNewUrlParser: true}, function(err, client) {
             }
         });
 
-        res.send('Hello from /postman');
+        res.send('Hello from /upcScan');
     });
 });
