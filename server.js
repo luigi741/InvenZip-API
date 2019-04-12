@@ -33,7 +33,7 @@ MongoClient.connect(dbURL, { useNewUrlParser: true }, function(err, client) {
         res.send('Hello from /');
     });
 
-    app.get('/test', function(req,res) {
+    app.post('/test', function(req,res) {
         console.log('/test');
         res.send('Reached /test route');
     });
