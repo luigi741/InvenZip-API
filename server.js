@@ -50,17 +50,17 @@ MongoClient.connect(dbURL, { useNewUrlParser: true }, function(err, client) {
             }
         });
         res.send('Hello from /upcScan');
+    });
 
     app.get('/getListNames', function(req, res) {
         console.log(req.body);
-
         db.collection('scanData').find({
             'user': 'luiscastro'
         }, function(err, result) {
             if (err) {
-                throw err;
+                throw err
             }
             console.log(result);
         });
-    })
+    });
 });
