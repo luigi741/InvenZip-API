@@ -53,14 +53,18 @@ MongoClient.connect(dbURL, { useNewUrlParser: true }, function(err, client) {
     });
 
     app.get('/getListNames', function(req, res) {
-        console.log(req.body);
+        // console.log(req.body);
+        console.log('GET request made to /getListNames');
         db.collection('scanData').find({
             'user': 'luiscastro'
+            // req.body.user: req.body.user.value;
         }, function(err, result) {
             if (err) {
                 throw err
             }
-            console.log(result);
+            console.log(result.name);
         });
+
+        res.send('Request received.');
     });
 });
