@@ -32,6 +32,13 @@ MongoClient.connect(dbURL, { useNewUrlParser: true }, function(err, client) {
     app.get('/', function(req, res) {
         res.send('Hello from /');
     });
+    app.get('/getUsers', function(req, res){
+        db.collection('userData').find({}).toArray(function(err,result){
+            if(err) throw err;
+            console.log(result);
+            res.send(JSON.stringify(result));
+        });
+    });
 
     app.post('/test', function(req,res) {
         console.log('/test');
@@ -66,5 +73,15 @@ MongoClient.connect(dbURL, { useNewUrlParser: true }, function(err, client) {
         });
 
         res.send('Request received.');
+    });
+    
+    app.post('/editSubmit', function(req, res){
+       let updateInfo = req.body;
+       console.log(updateInfo);
+       console.log(updateInfo[0].name);
+       db.collection("userData").updateOne({"name":updateInfo[0].name, "email":updateInfo[0].email}, 
+       {$set: {"name":updateInfo[1].name, "email":updateInfo[1].email}});
+       res.send('Post succeded');
+
     });
 });
