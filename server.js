@@ -59,20 +59,37 @@ MongoClient.connect(dbURL, { useNewUrlParser: true }, function(err, client) {
         res.send('Hello from /upcScan');
     });
 
-    app.get('/getListNames', function(req, res) {
-        // console.log(req.body);
+    app.get('/getListNames/:user', function(req, res) {
         console.log('GET request made to /getListNames');
-        db.collection('scanData').find({
-            'user': 'luiscastro'
-            // req.body.user: req.body.user.value;
-        }, function(err, result) {
+        var docs = [];
+        var user = req.params.user? req.params.user : "luiscastro";
+        db.collection('scanData').find({user})
+        .toArray(function(err, result) {
             if (err) {
-                throw err
+                return res.status(500).send(err)
             }
-            console.log(result.name);
+            docs = result;
+            return res.status(200).send(docs)
         });
+    });
 
-        res.send('Request received.');
+    app.post('/updateListNames', function(req, res, next) {
+        console.log('POST request made to /updateListNames');
+        db.collection('scanData').updateOne({id: req.body._id}, {$set: {name: req.body.name, location: req.body.location} }, function(err, res) {
+            if (err) throw err;
+            return res
+        });
+        res.status(200).send({message: "Updated"})
+    });
+
+    app.post('/updateItems/:id', function(req, res, next) {
+        console.log('POST request made to /updateItems');
+        db.collection('scanData').updateOne({id: req.params._id}, {$set: {items: req.body} }, function(err, res) {
+            if (err) throw err;
+            console.log("updated")
+            return res
+        });
+        res.status(200).send({message: "Updated"})
     });
     
     app.post('/editSubmit', function(req, res){
