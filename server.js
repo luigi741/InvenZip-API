@@ -11,8 +11,9 @@ const cors          = require('cors');
 const assert        = require('assert');
 const app           = express();
 const PORT          = 3000;
-const dbURL         = 'mongodb://admin:password@54.198.236.52:27017/testdb';
-const dbName        = 'testdb';
+const dbURL         = process.env.DB_URL;
+const dbName        = process.env.DB_NAME;
+require('dotenv').config();
 
 app.use(
     cors({ origin: true }),
@@ -29,10 +30,10 @@ MongoClient.connect(dbURL, { useNewUrlParser: true }, function(err, client) {
     console.log('Connected successfully to MongoDB server.');
     const db = client.db(dbName);
 
-    app.get('/', function(req, res) {
+    app.get('/', (req, res) => {
         res.send('Hello from /');
     });
-    app.get('/getUsers', function(req, res){
+    app.get('/getUsers', (req, res) => {
         db.collection('userData').find({}).toArray(function(err,result){
             if(err) throw err;
             console.log(result);
@@ -40,12 +41,12 @@ MongoClient.connect(dbURL, { useNewUrlParser: true }, function(err, client) {
         });
     });
 
-    app.post('/test', function(req,res) {
+    app.post('/test', (req,res) => {
         console.log('/test');
         res.send('Reached /test route');
     });
 
-    app.post('/upcScan', function(req, res) {
+    app.post('/upcScan', (req, res) => {
         console.log(req.body);
         var testObj = req.body;
         db.collection('scanData').insertOne(testObj, function(err, result) {
@@ -59,7 +60,7 @@ MongoClient.connect(dbURL, { useNewUrlParser: true }, function(err, client) {
         res.send('Hello from /upcScan');
     });
 
-    app.get('/getListNames/:user', function(req, res) {
+    app.get('/getListNames/:user', (req, res) => {
         console.log('GET request made to /getListNames');
         var docs = [];
         var user = req.params.user? req.params.user : "luiscastro";
@@ -73,7 +74,7 @@ MongoClient.connect(dbURL, { useNewUrlParser: true }, function(err, client) {
         });
     });
 
-    app.post('/updateListNames', function(req, res, next) {
+    app.post('/updateListNames', (req, res, next) => {
         console.log('POST request made to /updateListNames');
         db.collection('scanData').updateOne({id: req.body._id}, {$set: {name: req.body.name, location: req.body.location} }, function(err, res) {
             if (err) throw err;
@@ -82,7 +83,7 @@ MongoClient.connect(dbURL, { useNewUrlParser: true }, function(err, client) {
         res.status(200).send({message: "Updated"})
     });
 
-    app.post('/updateItems/:id', function(req, res, next) {
+    app.post('/updateItems/:id', (req, res, next) => {
         console.log('POST request made to /updateItems');
         db.collection('scanData').updateOne({id: req.params._id}, {$set: {items: req.body} }, function(err, res) {
             if (err) throw err;
@@ -92,13 +93,12 @@ MongoClient.connect(dbURL, { useNewUrlParser: true }, function(err, client) {
         res.status(200).send({message: "Updated"})
     });
     
-    app.post('/editSubmit', function(req, res){
+    app.post('/editSubmit', (req, res) => {
        let updateInfo = req.body;
        console.log(updateInfo);
        console.log(updateInfo[0].name);
        db.collection("userData").updateOne({"name":updateInfo[0].name, "email":updateInfo[0].email}, 
        {$set: {"name":updateInfo[1].name, "email":updateInfo[1].email}});
        res.send('Post succeded');
-
     });
 });
